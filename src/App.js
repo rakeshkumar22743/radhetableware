@@ -40,8 +40,13 @@ function App() {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
-              <a href="#" className="text-2xl font-bold text-white">
-                Radhe Tableware
+              <a href="#" className="flex flex-col items-center">
+                <img 
+                  src="/logoimg1.png" 
+                  alt="Radhe Tableware Logo" 
+                  className="h-10 w-auto object-contain"
+                />
+                <span className="text-white text-sm mt-1 w-42 text-center">tableware of your choice</span>
               </a>
             </div>
 
