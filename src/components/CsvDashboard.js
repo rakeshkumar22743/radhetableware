@@ -49,8 +49,18 @@ const CsvDashboard = () => {
   }, []);
 
   const handleView = (csvLink) => {
-    // Implement view functionality (e.g., open in new tab or fetch content)
-    window.open(csvLink, "_blank");
+    const filename = csvLink.split("/").pop(); // Extract filename from the link
+    navigate(`/csv-editor/${filename}`, { state: { link: csvLink } });
+  };
+
+  const handleDownload = (csvLink) => {
+    const filename = csvLink.split("/").pop();
+    const link = document.createElement("a");
+    link.href = csvLink;
+    link.setAttribute("download", filename); // Set the download attribute with the filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleEdit = (csvLink) => {
@@ -60,8 +70,9 @@ const CsvDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center text-white text-xl">
-        Loading CSV links...
+      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center">
+        <div className="spinner"></div>
+        <p className="ml-4 text-white text-xl">Loading CSV links...</p>
       </div>
     );
   }
@@ -107,6 +118,12 @@ const CsvDashboard = () => {
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
                   >
                     View
+                  </button>
+                  <button
+                    onClick={() => handleDownload(link)}
+                    className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+                  >
+                    Download
                   </button>
                   <button
                     onClick={() => handleEdit(link)}

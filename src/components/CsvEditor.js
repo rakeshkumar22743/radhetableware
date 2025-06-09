@@ -132,8 +132,9 @@ const CsvEditor = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center text-white text-xl">
-        Loading CSV content...
+      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center">
+        <div className="spinner"></div>
+        <p className="ml-4 text-white text-xl">Loading CSV content...</p>
       </div>
     );
   }

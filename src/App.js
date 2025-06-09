@@ -8,6 +8,7 @@ import SubmitFeedback from "./components/SubmitFeedback";
 import AdminLogin from "./components/AdminLogin";
 import CsvDashboard from "./components/CsvDashboard";
 import CsvEditor from "./components/CsvEditor";
+import OrderConfirmation from "./components/OrderConfirmation";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/csv-editor/:filename",
     element: <CsvEditor />,
+  },
+  {
+    path: "/order-confirmation/:order_id",
+    element: <OrderConfirmation />,
   },
 ]);
 
