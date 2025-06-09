@@ -1,11 +1,13 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './components/Home';
-import OrderPreview from './components/OrderPreview';
-import OrderConfirmed from './components/OrderConfirmed';
-import FeedbackForm from './components/FeedbackForm';
-import SubmitFeedback from './components/SubmitFeedback';
-import AdminLogin from './components/AdminLogin';
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./components/Home";
+import OrderPreview from "./components/OrderPreview";
+import OrderConfirmed from "./components/OrderConfirmed";
+import FeedbackForm from "./components/FeedbackForm";
+import SubmitFeedback from "./components/SubmitFeedback";
+import AdminLogin from "./components/AdminLogin";
+import CsvDashboard from "./components/CsvDashboard";
+import CsvEditor from "./components/CsvEditor";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
     path: "/OrderConfirmed",
     element: <OrderConfirmed />,
   },
-   {
+  {
     path: "/FeedbackForm",
     element: <FeedbackForm />,
   },
@@ -30,9 +32,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/AdminLogin",
-    element: <AdminLogin/>,
+    element: <AdminLogin />,
   },
- 
+  {
+    path: "/csv-dashboard",
+    element: <CsvDashboard />,
+  },
+  {
+    path: "/csv-editor/:filename",
+    element: <CsvEditor />,
+  },
 ]);
 
 function App() {
