@@ -9,6 +9,18 @@ const CsvDashboard = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // Function to convert string to camel case
+  const toCamelCase = (str) => {
+    return str
+      .replace('.csv', '') // Remove .csv extension
+      .split(/[-_\s]/) // Split by hyphen, underscore, or space
+      .map((word, index) => {
+        // Capitalize first letter of each word
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(''); // Join words together
+  };
+
   useEffect(() => {
     const fetchCsvLinks = async () => {
       try {
@@ -110,7 +122,7 @@ const CsvDashboard = () => {
                 className="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-xl shadow-sm"
               >
                 <span className="text-gray-800 font-medium mb-2 sm:mb-0 sm:mr-4 break-all">
-                  {link.split("/").pop()} {/* Display file name */}
+                  {toCamelCase(link.split("/").pop())}
                 </span>
                 <div className="flex space-x-2">
                   <button

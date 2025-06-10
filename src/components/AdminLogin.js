@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaUser, FaMobileAlt, FaIdCard, FaLock } from "react-icons/fa";
+import { FaUser, FaMobileAlt, FaIdCard, FaLock, FaBuilding } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,6 @@ const AdminLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // const [success, setSuccess] = useState(""); // Removed as we will redirect
   const navigate = useNavigate();
 
   const containerVariants = {
@@ -32,7 +31,6 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    // setSuccess(""); // Removed as we are redirecting
 
     try {
       const response = await axios.post(
@@ -44,10 +42,9 @@ const AdminLogin = () => {
       );
 
       if (response.data.success) {
-        // Store token and redirect
-        localStorage.setItem("jwtToken", response.data.data.token); // Store the token
+        localStorage.setItem("jwtToken", response.data.data.token);
         console.log("Login successful:", response.data);
-        navigate("/csv-dashboard"); // Redirect to the new dashboard route
+        navigate("/csv-dashboard");
       } else {
         setError(response.data.message || "Login failed.");
       }
@@ -62,29 +59,31 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-2 sm:p-3 md:p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl w-full max-w-md p-4 sm:p-6 md:p-8 border border-white/20"
+        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl sm:rounded-3xl w-full max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-md p-3 sm:p-4 md:p-6 border border-white/20"
       >
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="space-y-4 sm:space-y-6"
+          className="space-y-3 sm:space-y-4"
         >
-          <motion.div variants={itemVariants} className="text-center">
-            <div className="inline-block p-2 sm:p-3 bg-indigo-100 rounded-full mb-3 sm:mb-4">
-              <FaLock className="text-indigo-600 text-xl sm:text-2xl" />
+          <motion.div variants={itemVariants} className="text-center space-y-2 sm:space-y-3">
+            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full shadow-lg">
+              <FaBuilding className="text-white text-xl sm:text-2xl" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Admin Login
-            </h2>
-            <p className="text-sm sm:text-base text-gray-600 mt-2">
-              Enter your credentials to access the admin panel
-            </p>
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Admin Portal
+              </h2>
+              <p className="text-gray-600 mt-1 text-xs sm:text-sm">
+                Enter your credentials to access the admin panel
+              </p>
+            </div>
           </motion.div>
 
           <motion.form
@@ -92,83 +91,96 @@ const AdminLogin = () => {
             className="space-y-3 sm:space-y-4"
             onSubmit={handleSubmit}
           >
-            <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-xl">
-                <div className="bg-indigo-100 p-1.5 sm:p-2 rounded-lg">
-                  <FaUser className="text-indigo-600 text-base sm:text-lg" />
+            <div className="space-y-1 sm:space-y-1.5">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                Admin Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaUser className="text-gray-400 text-sm" />
                 </div>
-                <div className="flex-1">
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                    Admin Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter admin name"
-                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                    value={adminName}
-                    onChange={(e) => setAdminName(e.target.value)}
-                  />
-                </div>
+                <input
+                  type="text"
+                  placeholder="Enter admin name"
+                  className="w-full pl-9 pr-3 py-2 sm:py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  value={adminName}
+                  onChange={(e) => setAdminName(e.target.value)}
+                />
               </div>
+            </div>
 
-              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-xl">
-                <div className="bg-indigo-100 p-1.5 sm:p-2 rounded-lg">
-                  <FaIdCard className="text-indigo-600 text-base sm:text-lg" />
+            <div className="space-y-1 sm:space-y-1.5">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                User ID
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaIdCard className="text-gray-400 text-sm" />
                 </div>
-                <div className="flex-1">
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                    User ID
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter User ID"
-                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    required
-                  />
-                </div>
+                <input
+                  type="text"
+                  placeholder="Enter User ID"
+                  className="w-full pl-9 pr-3 py-2 sm:py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  required
+                />
               </div>
+            </div>
 
-              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-xl">
-                <div className="bg-indigo-100 p-1.5 sm:p-2 rounded-lg">
-                  <FaMobileAlt className="text-indigo-600 text-base sm:text-lg" />
+            <div className="space-y-1 sm:space-y-1.5">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                Mobile Number
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaMobileAlt className="text-gray-400 text-sm" />
                 </div>
-                <div className="flex-1">
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="tel"
-                    placeholder="Enter mobile number"
-                    className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    required
-                  />
-                </div>
+                <input
+                  type="tel"
+                  placeholder="Enter mobile number"
+                  className="w-full pl-9 pr-3 py-2 sm:py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  required
+                />
               </div>
             </div>
 
             {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 rounded-lg text-xs sm:text-sm"
+              >
+                {error}
+              </motion.div>
             )}
-            {/* Removed success message as we are redirecting */}
 
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 sm:py-3 text-sm sm:text-base rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={loading}
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 sm:py-2.5 rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  <span className="text-sm">Logging in...</span>
+                </div>
+              ) : (
+                "Login"
+              )}
             </motion.button>
           </motion.form>
 
-          <motion.div variants={itemVariants} className="text-center">
-            <p className="text-xs sm:text-sm text-gray-500">
-              © 2025 Radhe Melamine Admin Panel
+          <motion.div
+            variants={itemVariants}
+            className="text-center pt-2 sm:pt-3 border-t border-gray-100"
+          >
+            <p className="text-xs text-gray-500">
+              © 2024 Radhe Melamine. All rights reserved.
             </p>
           </motion.div>
         </motion.div>

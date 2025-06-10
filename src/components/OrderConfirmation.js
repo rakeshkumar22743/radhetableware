@@ -46,6 +46,7 @@ const OrderConfirmation = () => {
       if (response.status === 200) {
         setOrderConfirmed(true);
         alert("Order confirmed successfully!");
+        navigate("/SubmitFeedback");
       } else {
         alert("Failed to confirm order: " + response.data.message);
       }
@@ -62,7 +63,13 @@ const OrderConfirmation = () => {
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading order details...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
