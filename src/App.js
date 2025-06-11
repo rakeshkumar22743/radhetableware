@@ -19,10 +19,10 @@ const router = createBrowserRouter([
     path: "/orderpreview",
     element: <OrderPreview />,
   },
-  {
-    path: "/OrderConfirmed",
-    element: <OrderConfirmed />,
-  },
+  // {
+  //   path: "/OrderConfirmed",
+  //   element: <OrderConfirmed />,
+  // },
   {
     path: "/FeedbackForm",
     element: <FeedbackForm />,

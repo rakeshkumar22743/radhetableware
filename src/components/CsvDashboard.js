@@ -82,7 +82,7 @@ const CsvDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center">
         <div className="spinner"></div>
         <p className="ml-4 text-white text-xl">Loading CSV links...</p>
       </div>
@@ -91,55 +91,55 @@ const CsvDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center text-red-400 text-xl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-red-400 text-xl">
         Error: {error}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center p-2 sm:p-3 md:p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl w-full max-w-2xl p-4 sm:p-6 md:p-8 border border-white/20"
+        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl w-full max-w-[98%] sm:max-w-[95%] md:max-w-[90%] lg:max-w-2xl p-3 sm:p-4 md:p-6 border border-white/20 min-h-[80vh] overflow-y-auto"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent text-center mb-6">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent text-center mb-6 sm:mb-8">
           CSV Dashboard
         </h2>
 
         {csvLinks.length === 0 ? (
-          <p className="text-center text-gray-600">No CSV files found.</p>
+          <p className="text-center text-gray-600 text-sm sm:text-base">No CSV files found.</p>
         ) : (
-          <ul className="space-y-4">
+          <ul className="space-y-4 sm:space-y-6">
             {csvLinks.map((link, index) => (
               <motion.li
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-xl shadow-sm"
+                className="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-3 sm:p-4 md:p-5 rounded-xl shadow-sm"
               >
-                <span className="text-gray-800 font-medium mb-2 sm:mb-0 sm:mr-4 break-all">
+                <span className="text-gray-800 font-medium mb-3 sm:mb-0 sm:mr-4 break-all text-sm sm:text-base text-center sm:text-left w-full sm:w-auto">
                   {toCamelCase(link.split("/").pop())}
                 </span>
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
                   <button
                     onClick={() => handleView(link)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm transition-colors duration-200 w-full sm:w-auto"
                   >
                     View
                   </button>
                   <button
                     onClick={() => handleDownload(link)}
-                    className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+                    className="bg-purple-500 hover:bg-purple-600 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm transition-colors duration-200 w-full sm:w-auto"
                   >
                     Download
                   </button>
                   <button
                     onClick={() => handleEdit(link)}
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm transition-colors duration-200 w-full sm:w-auto"
                   >
                     Edit
                   </button>

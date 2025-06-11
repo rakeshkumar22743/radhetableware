@@ -59,12 +59,12 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-2 sm:p-3 md:p-4">
+    <div className="h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center p-2 sm:p-3 md:p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl sm:rounded-3xl w-full max-w-[95%] sm:max-w-[85%] md:max-w-[75%] lg:max-w-md p-3 sm:p-4 md:p-6 border border-white/20"
+        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl sm:rounded-3xl w-full max-w-[98%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-lg p-3 sm:p-4 md:p-6 border border-white/20"
       >
         <motion.div
           variants={containerVariants}
