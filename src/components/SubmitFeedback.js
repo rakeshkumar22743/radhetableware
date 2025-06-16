@@ -1,8 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaHeart, FaArrowRight } from 'react-icons/fa';
+import { Navigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const SubmitFeedback = () => {
+  const navigate = useNavigate();
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -16,6 +21,10 @@ const SubmitFeedback = () => {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  const handleFeedbackClick = () => {
+    navigate('/FeedbackForm');
   };
 
   return (
@@ -45,7 +54,7 @@ const SubmitFeedback = () => {
 
           <motion.div variants={itemVariants}>
             <h1 className="text-3xl font-bold text-gray-800 mb-4">
-              Thank you for your feedback!
+              Thank you!
             </h1>
             <p className="text-gray-600 text-lg">
               Your input helps us improve our service and provide better experiences.
@@ -66,9 +75,10 @@ const SubmitFeedback = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleFeedbackClick}
               className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-3 rounded-full text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center gap-2"
             >
-              Return to Home
+              Give Feedback
               <FaArrowRight className="text-sm" />
             </motion.button>
             <p className="text-sm text-gray-500 mt-4">

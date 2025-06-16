@@ -17,6 +17,7 @@ const OrderConfirmation = () => {
         const response = await axios.get(
           `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
         );
+        console.log('Order Details Response:', response.data);
         setOrderDetails(response.data);
       } catch (err) {
         setError("Failed to fetch order details. Please check the order ID.");
@@ -133,7 +134,16 @@ const OrderConfirmation = () => {
                 <strong>Company Name:</strong> {orderDetails.company_name}
               </p>
               <p>
+                <strong>Booking Source:</strong> {orderDetails.booking_source}
+              </p>
+              <p>
                 <strong>Product:</strong> {orderDetails.product}
+              </p>
+              <p>
+                <strong>Size:</strong> {orderDetails.size}
+              </p>
+              <p>
+                <strong>Shape:</strong> {orderDetails.shape}
               </p>
               <p>
                 <strong>Design:</strong> {orderDetails.design}
