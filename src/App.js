@@ -9,6 +9,7 @@ import AdminLogin from "./components/AdminLogin";
 import CsvDashboard from "./components/CsvDashboard";
 import CsvEditor from "./components/CsvEditor";
 import OrderConfirmation from "./components/OrderConfirmation";
+import AlreadyConfirm from "./components/AlreadyConfirm";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/order-confirmation/:order_id",
     element: <OrderConfirmation />,
+  },
+  {
+    path: "/already-confirm",
+    element: <AlreadyConfirm />,
   },
 ]);
 

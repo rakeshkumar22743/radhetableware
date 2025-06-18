@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import {
   FaStar,
   FaUser,
@@ -12,15 +13,44 @@ import {
 } from "react-icons/fa";
 
 const FeedbackForm = () => {
+  const location = useLocation();
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [feedback, setFeedback] = useState(""); // This is for additional comments, not part of the curl example
   const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', 'loading'
+  const [loading, setLoading] = useState(true);
 
   // User-fillable fields
   const [salesmanName, setSalesmanName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [submissionDate, setSubmissionDate] = useState(""); // Format as YYYY-MM-DD for input type="date"
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const orderId = location.state?.orderId;
+        if (orderId) {
+          const response = await axios.get(
+            `https://radhemelamime.onrender.com/get_order_details?order_id=${orderId}`
+          );
+          
+          if (response.data) {
+            setSalesmanName(response.data.salesman_name || "");
+            setCompanyName(response.data.company_name || "");
+            // Format the date to YYYY-MM-DD
+            const date = response.data.created_at ? response.data.created_at.split('T')[0] : "";
+            setSubmissionDate(date);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching order details:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [location.state?.orderId]);
 
   const handleSubmit = async () => {
     if (rating === 0) {

@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaHeart, FaArrowRight } from 'react-icons/fa';
-import { Navigate} from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 
 const SubmitFeedback = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -24,7 +25,17 @@ const SubmitFeedback = () => {
   };
 
   const handleFeedbackClick = () => {
-    navigate('/FeedbackForm');
+    // Get order ID from the previous page's state
+    const orderId = location.state?.orderId;
+    if (orderId) {
+      navigate('/FeedbackForm', {
+        state: {
+          orderId: orderId
+        }
+      });
+    } else {
+      navigate('/FeedbackForm');
+    }
   };
 
   return (

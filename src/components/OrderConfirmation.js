@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion"; // Import motion
+import AlreadyConfirm from "./AlreadyConfirm";
 
 const OrderConfirmation = () => {
   const { order_id } = useParams();
@@ -47,7 +48,11 @@ const OrderConfirmation = () => {
       if (response.status === 200) {
         setOrderConfirmed(true);
         alert("Order confirmed successfully!");
-        navigate("/SubmitFeedback");
+        navigate("/SubmitFeedback", {
+          state: {
+            orderId: order_id
+          }
+        });
       } else {
         alert("Failed to confirm order: " + response.data.message);
       }
@@ -59,8 +64,13 @@ const OrderConfirmation = () => {
   };
 
   const handleFeedback = () => {
-    // Redirect to the feedback page
-    navigate("/FeedbackForm"); // Corrected to match the route in App.js
+    // Pass order ID to the feedback form
+     navigate("/SubmitFeedback");
+    navigate("/FeedbackForm", {
+      state: {
+        orderId: order_id
+      }
+    });
   };
 
   if (loading) {
@@ -79,6 +89,11 @@ const OrderConfirmation = () => {
 
   if (!orderDetails) {
     return <div className="text-center py-8">No order details found.</div>;
+  }
+
+  // If status is not "Waiting For Client Notification", show AlreadyConfirm page
+  if (orderDetails.status !== "Waiting For Client Notification") {
+    return <AlreadyConfirm />;
   }
 
   const containerVariants = {
