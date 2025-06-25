@@ -111,119 +111,201 @@ const OrderConfirmation = () => {
     visible: { opacity: 1, y: 0 },
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl w-full max-w-2xl p-8 border border-white/20"
-      >
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-8"
-        >
-          <motion.div variants={itemVariants} className="text-center">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
-              Order Confirmation
-            </h1>
-          </motion.div>
+  const productDetailsList = [];
+  if (orderDetails && orderDetails.product) {
+    const products = String(orderDetails.product).split(',');
+    const sizes = String(orderDetails.size || '').split(',');
+    const shapes = String(orderDetails.shape || '').split(',');
+    const designs = String(orderDetails.design || '').split(',');
 
+    for (let i = 0; i < products.length; i++) {
+      productDetailsList.push({
+        product: products[i] ? products[i].trim() : '-',
+        size: sizes[i] ? sizes[i].trim() : '-',
+        shape: shapes[i] ? shapes[i].trim() : '-',
+        design: designs[i] ? designs[i].trim() : '-',
+      });
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center p-2 sm:p-4">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl w-full md:w-1/2 p-4 sm:p-6 md:p-8 border border-white/20"
+        >
           <motion.div
-            variants={itemVariants}
-            className="bg-white shadow-md rounded-lg p-6 mb-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-6 md:space-y-8"
           >
-            <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-              Order Details
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <p>
-                <strong>Order ID:</strong> {orderDetails.order_id}
-              </p>
-              <p>
-                <strong>Salesman Name:</strong> {orderDetails.salesman_name}
-              </p>
-              <p>
-                <strong>Company Name:</strong> {orderDetails.company_name}
-              </p>
-              <p>
-                <strong>Booking Source:</strong> {orderDetails.booking_source}
-              </p>
-              <p>
-                <strong>Product:</strong> {orderDetails.product}
-              </p>
-              <p>
-                <strong>Size:</strong> {orderDetails.size}
-              </p>
-              <p>
-                <strong>Shape:</strong> {orderDetails.shape}
-              </p>
-              <p>
-                <strong>Design:</strong> {orderDetails.design}
-              </p>
-              <p>
-                <strong>Quantity:</strong> {orderDetails.quantity}
-              </p>
-              <p>
-                <strong>Advance Paid:</strong> {orderDetails.advance_paid}
-              </p>
-              <p>
-                <strong>Due Amount:</strong> {orderDetails.due_amount}
-              </p>
-              <p>
-                <strong>Delivery Date:</strong> {orderDetails.delivery_date}
-              </p>
-              <p>
-                <strong>Payment Mode:</strong> {orderDetails.payment_mode}
-              </p>
-              <p>
-                <strong>Is Completed:</strong> {orderDetails.is_completed}
-              </p>
-              <p>
-                <strong>Created At:</strong> {orderDetails.created_at}
-              </p>
-              <p>
-                <strong>Status:</strong> {orderDetails.status}
-              </p>
+            <motion.div variants={itemVariants} className="text-center">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+                Order Confirmation
+              </h1>
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
+              className="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6"
+            >
+              <h2 className="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                Order Details
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p>
+                  <strong>Order ID:</strong> {orderDetails.order_id}
+                </p>
+                <p>
+                  <strong>Salesman Name:</strong> {orderDetails.salesman_name}
+                </p>
+                <p>
+                  <strong>Company Name:</strong> {orderDetails.company_name}
+                </p>
+                <p>
+                  <strong>Booking Source:</strong> {orderDetails.booking_source}
+                </p>
+                <p>
+                  <strong>Quantity:</strong> {orderDetails.quantity}
+                </p>
+                <p>
+                  <strong>Delivery Date:</strong> {orderDetails.delivery_date}
+                </p>
+                <p>
+                  <strong>Payment Mode:</strong> {orderDetails.payment_mode}
+                </p>
+                <p>
+                  <strong>Is Completed:</strong> {orderDetails.is_completed}
+                </p>
+                <p>
+                  <strong>Created At:</strong> {orderDetails.created_at}
+                </p>
+                <p>
+                  <strong>Status:</strong> {orderDetails.status}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl w-full md:w-1/2 p-4 sm:p-6 md:p-8 border border-white/20 flex flex-col"
+        >
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col flex-grow"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 text-center"
+            >
+              Product Specification
+            </motion.h2>
+            <motion.div
+              variants={itemVariants}
+              className="overflow-y-auto flex-grow"
+            >
+              <table className="min-w-full bg-transparent rounded-lg">
+                <thead className="bg-gray-50 bg-opacity-50">
+                  <tr>
+                    <th className="sticky top-0 bg-gray-50/95 backdrop-blur-sm py-2 px-2 sm:py-3 sm:px-6 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">
+                      Product
+                    </th>
+                    <th className="sticky top-0 bg-gray-50/95 backdrop-blur-sm py-2 px-2 sm:py-3 sm:px-6 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">
+                      Size
+                    </th>
+                    <th className="sticky top-0 bg-gray-50/95 backdrop-blur-sm py-2 px-2 sm:py-3 sm:px-6 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">
+                      Shape
+                    </th>
+                    <th className="sticky top-0 bg-gray-50/95 backdrop-blur-sm py-2 px-2 sm:py-3 sm:px-6 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">
+                      Design
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {productDetailsList.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-50 hover:bg-opacity-30"
+                    >
+                      <td className="py-3 px-2 sm:py-4 sm:px-6 whitespace-nowrap text-sm">
+                        {item.product}
+                      </td>
+                      <td className="py-3 px-2 sm:py-4 sm:px-6 whitespace-nowrap text-sm">
+                        {item.size}
+                      </td>
+                      <td className="py-3 px-2 sm:py-4 sm:px-6 whitespace-nowrap text-sm">
+                        {item.shape}
+                      </td>
+                      <td className="py-3 px-2 sm:py-4 sm:px-6 whitespace-nowrap text-sm">
+                        {item.design}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>
+            <div>
+              <motion.div
+                variants={itemVariants}
+                className="mt-6 bg-white shadow-md rounded-lg p-4 sm:p-6"
+              >
+                <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-4 text-center">
+                  Payment Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                  <p>
+                    <strong>Advance Paid:</strong> {orderDetails.advance_paid}
+                  </p>
+                  <p>
+                    <strong>Due Amount:</strong> {orderDetails.due_amount}
+                  </p>
+                </div>
+              </motion.div>
+              {!orderConfirmed ? (
+                <motion.div
+                  variants={itemVariants}
+                  className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6"
+                >
+                  <button
+                    onClick={handleConfirmOrder}
+                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
+                  >
+                    Confirm Order
+                  </button>
+                  <button
+                    onClick={handleFeedback}
+                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
+                  >
+                    Give Feedback
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  variants={itemVariants}
+                  className="text-center text-lg text-green-600 font-semibold mt-6 flex flex-col items-center"
+                >
+                  <span>Order has been confirmed!</span>
+                  <button
+                    onClick={handleFeedback}
+                    className="mt-4 w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
+                  >
+                    Give Feedback
+                  </button>
+                </motion.div>
+              )}
             </div>
           </motion.div>
-
-          {!orderConfirmed ? (
-            <motion.div
-              variants={itemVariants}
-              className="flex justify-center space-x-4"
-            >
-              <button
-                onClick={handleConfirmOrder}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
-              >
-                Confirm Order
-              </button>
-              <button
-                onClick={handleFeedback}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
-              >
-                Give Feedback
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div
-              variants={itemVariants}
-              className="text-center text-lg text-green-600 font-semibold"
-            >
-              Order has been confirmed!
-              <button
-                onClick={handleFeedback}
-                className="ml-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
-              >
-                Give Feedback
-              </button>
-            </motion.div>
-          )}
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 };

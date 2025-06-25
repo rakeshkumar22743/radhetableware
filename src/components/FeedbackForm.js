@@ -37,8 +37,18 @@ const FeedbackForm = () => {
           if (response.data) {
             setSalesmanName(response.data.salesman_name || "");
             setCompanyName(response.data.company_name || "");
-            // Format the date to YYYY-MM-DD
-            const date = response.data.created_at ? response.data.created_at.split('T')[0] : "";
+            
+            // Format date from DD-MM-YYYY to YYYY-MM-DD
+            const formatDate = (dateString) => {
+              if (!dateString) return "";
+              const parts = dateString.split('-');
+              if (parts.length === 3 && parts[0].length === 2) {
+                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+              }
+              return dateString;
+            };
+            
+            const date = formatDate(response.data.created_at);
             setSubmissionDate(date);
           }
         }
