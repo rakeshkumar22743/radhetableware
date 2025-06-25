@@ -49,7 +49,9 @@ const FeedbackForm = () => {
             };
             
             const date = formatDate(response.data.created_at);
-            setSubmissionDate(date);
+            // For display, convert back to DD/MM/YYYY format
+            const displayDate = response.data.created_at || "";
+            setSubmissionDate(displayDate);
           }
         }
       } catch (err) {
@@ -189,10 +191,11 @@ const FeedbackForm = () => {
                 Date
               </label>
               <input
-                type="date"
+                type="text"
                 value={submissionDate}
-                onChange={(e) => setSubmissionDate(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                readOnly
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-100 cursor-not-allowed"
+                placeholder="DD-MM-YYYY"
               />
             </div>
           </motion.div>
