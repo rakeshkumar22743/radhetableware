@@ -8,23 +8,48 @@ const OrderConfirmation = () => {
   const { order_id } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [retrying, setRetrying] = useState(false); // New state for retry loading
+  const [retryCount, setRetryCount] = useState(0); // New state for retry count
   const [error, setError] = useState(null);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-    const fetchOrderDetails = async () => {
+    const fetchOrderDetails = async (attempt = 0) => {
+      setLoading(true);
+      setError(null); // Clear previous errors
+      if (attempt > 0) {
+        setRetrying(true); // Indicate retrying
+      }
+
       try {
         const response = await axios.get(
           `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
         );
-        console.log('Order Details Response:', response.data);
+        console.log("Order Details Response:", response.data);
         setOrderDetails(response.data);
+        setOrderConfirmed(
+          response.data.status !== "Waiting For Client Notification"
+        ); // Set orderConfirmed based on initial status
       } catch (err) {
-        setError("Failed to fetch order details. Please check the order ID.");
-        console.error("Error fetching order details:", err);
+        console.error(
+          `Error fetching order details (attempt ${attempt + 1}):`,
+          err
+        );
+        if (attempt < 2) {
+          // Retry up to 2 times (0, 1, 2 attempts total)
+          setRetryCount(attempt + 1);
+          await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
+          fetchOrderDetails(attempt + 1);
+          return; // Exit to prevent setting loading to false prematurely
+        } else {
+          setError(
+            "Failed to fetch order details after multiple attempts. Please check the order ID."
+          );
+        }
       } finally {
         setLoading(false);
+        setRetrying(false); // Reset retrying state
       }
     };
 
@@ -50,8 +75,8 @@ const OrderConfirmation = () => {
         alert("Order confirmed successfully!");
         navigate("/SubmitFeedback", {
           state: {
-            orderId: order_id
-          }
+            orderId: order_id,
+          },
         });
       } else {
         alert("Failed to confirm order: " + response.data.message);
@@ -65,11 +90,11 @@ const OrderConfirmation = () => {
 
   const handleFeedback = () => {
     // Pass order ID to the feedback form
-     navigate("/SubmitFeedback");
+    navigate("/SubmitFeedback");
     navigate("/FeedbackForm", {
       state: {
-        orderId: order_id
-      }
+        orderId: order_id,
+      },
     });
   };
 
@@ -77,7 +102,16 @@ const OrderConfirmation = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center">
         <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          {retrying ? (
+            <>
+              <div className="w-16 h-16 border-4 border-yellow-300 border-t-transparent rounded-full animate-bounce"></div>
+              <p className="mt-4 text-white text-lg">
+                Retrying... (Attempt {retryCount + 1})
+              </p>
+            </>
+          ) : (
+            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          )}
         </div>
       </div>
     );
@@ -92,7 +126,8 @@ const OrderConfirmation = () => {
   }
 
   // If status is not "Waiting For Client Notification", show AlreadyConfirm page
-  if (orderDetails.status !== "Waiting For Client Notification") {
+  // If order is already confirmed (status is not "Waiting For Client Notification"), show AlreadyConfirm page
+  if (orderConfirmed) {
     return <AlreadyConfirm />;
   }
 
@@ -113,17 +148,17 @@ const OrderConfirmation = () => {
 
   const productDetailsList = [];
   if (orderDetails && orderDetails.product) {
-    const products = String(orderDetails.product).split(',');
-    const sizes = String(orderDetails.size || '').split(',');
-    const shapes = String(orderDetails.shape || '').split(',');
-    const designs = String(orderDetails.design || '').split(',');
+    const products = String(orderDetails.product).split(",");
+    const sizes = String(orderDetails.size || "").split(",");
+    const shapes = String(orderDetails.shape || "").split(",");
+    const designs = String(orderDetails.design || "").split(",");
 
     for (let i = 0; i < products.length; i++) {
       productDetailsList.push({
-        product: products[i] ? products[i].trim() : '-',
-        size: sizes[i] ? sizes[i].trim() : '-',
-        shape: shapes[i] ? shapes[i].trim() : '-',
-        design: designs[i] ? designs[i].trim() : '-',
+        product: products[i] ? products[i].trim() : "-",
+        size: sizes[i] ? sizes[i].trim() : "-",
+        shape: shapes[i] ? shapes[i].trim() : "-",
+        design: designs[i] ? designs[i].trim() : "-",
       });
     }
   }
