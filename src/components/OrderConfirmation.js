@@ -8,54 +8,92 @@ const OrderConfirmation = () => {
   const { order_id } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [retrying, setRetrying] = useState(false); // New state for retry loading
-  const [retryCount, setRetryCount] = useState(0); // New state for retry count
+  const [retrying, setRetrying] = useState(false);
   const [error, setError] = useState(null);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [autoRetryTimer, setAutoRetryTimer] = useState(null); // New state for auto-retry timer
+  const [retryAttempt, setRetryAttempt] = useState(0); // Track auto-retry attempts
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchOrderDetails = async (attempt = 0) => {
-      setLoading(true);
-      setError(null); // Clear previous errors
-      if (attempt > 0) {
-        setRetrying(true); // Indicate retrying
+  const MAX_RETRY_DURATION = 60 * 1000; // 1 minute in milliseconds
+  const RETRY_INTERVAL = 10 * 1000; // 10 seconds in milliseconds
+
+  const fetchOrderDetails = async (isAutoRetry = false) => {
+    setLoading(true);
+    setError(null);
+    if (isAutoRetry) {
+      setRetrying(true);
+      setRetryAttempt((prev) => prev + 1);
+    } else {
+      setRetrying(false);
+      setRetryAttempt(0); // Reset manual retry
+    }
+
+    try {
+      const response = await axios.get(
+        `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
+      );
+      console.log("Order Details Response:", response.data);
+      setOrderDetails(response.data);
+      setOrderConfirmed(
+        response.data.status !== "Waiting For Client Notification"
+      );
+      // If successful, clear any auto-retry timer
+      if (autoRetryTimer) {
+        clearTimeout(autoRetryTimer);
+        setAutoRetryTimer(null);
       }
+    } catch (err) {
+      console.error(`Error fetching order details:`, err);
+      setError("Failed to fetch order details.");
+      if (!orderConfirmed && !isAutoRetry) {
+        // Only start auto-retry if not confirmed and not already in auto-retry
+        startAutoRetry();
+      }
+    } finally {
+      setLoading(false);
+      setRetrying(false);
+    }
+  };
 
-      try {
-        const response = await axios.get(
-          `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
+  const startAutoRetry = () => {
+    const startTime = Date.now();
+    let currentAttempt = 0;
+
+    const retryLoop = () => {
+      if (Date.now() - startTime < MAX_RETRY_DURATION) {
+        currentAttempt++;
+        setRetryAttempt(currentAttempt);
+        setRetrying(true);
+        fetchOrderDetails(true); // Indicate this is an auto-retry
+        const timer = setTimeout(retryLoop, RETRY_INTERVAL);
+        setAutoRetryTimer(timer);
+      } else {
+        setError(
+          "Order details not found after multiple retries. Please try again later."
         );
-        console.log("Order Details Response:", response.data);
-        setOrderDetails(response.data);
-        setOrderConfirmed(
-          response.data.status !== "Waiting For Client Notification"
-        ); // Set orderConfirmed based on initial status
-      } catch (err) {
-        console.error(
-          `Error fetching order details (attempt ${attempt + 1}):`,
-          err
-        );
-        if (attempt < 2) {
-          // Retry up to 2 times (0, 1, 2 attempts total)
-          setRetryCount(attempt + 1);
-          await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
-          fetchOrderDetails(attempt + 1);
-          return; // Exit to prevent setting loading to false prematurely
-        } else {
-          setError(
-            "Failed to fetch order details after multiple attempts. Please check the order ID."
-          );
-        }
-      } finally {
-        setLoading(false);
-        setRetrying(false); // Reset retrying state
+        setRetrying(false);
+        setAutoRetryTimer(null);
       }
     };
 
+    // Clear any existing timer before starting a new one
+    if (autoRetryTimer) {
+      clearTimeout(autoRetryTimer);
+    }
+    retryLoop(); // Start the first retry immediately
+  };
+
+  useEffect(() => {
     if (order_id) {
       fetchOrderDetails();
     }
+    // Cleanup function to clear timer on component unmount
+    return () => {
+      if (autoRetryTimer) {
+        clearTimeout(autoRetryTimer);
+      }
+    };
   }, [order_id]);
 
   const handleConfirmOrder = async () => {
@@ -106,7 +144,7 @@ const OrderConfirmation = () => {
             <>
               <div className="w-16 h-16 border-4 border-yellow-300 border-t-transparent rounded-full animate-bounce"></div>
               <p className="mt-4 text-white text-lg">
-                Retrying... (Attempt {retryCount + 1})
+                Retrying... (Attempt {retryAttempt})
               </p>
             </>
           ) : (
@@ -315,6 +353,12 @@ const OrderConfirmation = () => {
                     className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
                   >
                     Confirm Order
+                  </button>
+                  <button
+                    onClick={() => fetchOrderDetails(false)} // Manual retry button
+                    className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:shadow-outline"
+                  >
+                    Retry Fetch
                   </button>
                   <button
                     onClick={handleFeedback}
