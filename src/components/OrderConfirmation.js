@@ -31,7 +31,8 @@ const OrderConfirmation = () => {
 
     try {
       const response = await axios.get(
-        `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
+        // `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
+        ` https://radhemelamine-backend.onrender.com/get_order_details?order_id=${order_id}`
       );
       console.log("Order Details Response:", response.data);
       setOrderDetails(response.data);
