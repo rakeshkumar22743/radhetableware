@@ -16,7 +16,8 @@ const OrderConfirmation = () => {
     const fetchOrderDetails = async () => {
       try {
         const response = await axios.get(
-          `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
+          // `https://radhemelamime.onrender.com/get_order_details?order_id=${order_id}`
+          ` https://radhemelamine-backend.onrender.com/get_order_details?order_id=${order_id}`
         );
         console.log('Order Details Response:', response.data);
         setOrderDetails(response.data);
@@ -36,7 +37,8 @@ const OrderConfirmation = () => {
   const handleConfirmOrder = async () => {
     try {
       const response = await axios.post(
-        "https://radhemelamime.onrender.com/update_order_status",
+        // "https://radhemelamime.onrender.com/update_order_status",
+         " https://radhemelamine-backend.onrender.com/update_order_status",
         `order_id=${order_id}&confirmation=true`,
         {
           headers: {
@@ -185,7 +187,7 @@ const OrderConfirmation = () => {
                   <strong>Created At:</strong> {orderDetails.created_at}
                 </p>
                 <p>
-                  <strong>Status:</strong> {orderDetails.status}
+                  <strong>Status:</strong> {orderDetails.status === 'Waiting For Client Notification' ? 'Waiting for client confirmation' : orderDetails.status}
                 </p>
               </div>
             </motion.div>

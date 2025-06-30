@@ -31,7 +31,8 @@ const FeedbackForm = () => {
         const orderId = location.state?.orderId;
         if (orderId) {
           const response = await axios.get(
-            `https://radhemelamime.onrender.com/get_order_details?order_id=${orderId}`
+            // `https://radhemelamime.onrender.com/get_order_details?order_id=${orderId}`
+            ` https://radhemelamine-backend.onrender.com/get_order_details?order_id=${orderId}`
           );
           
           if (response.data) {
@@ -79,7 +80,8 @@ const FeedbackForm = () => {
       payload.append("date", submissionDate);
 
       const response = await axios.post(
-        "https://radhemelamime.onrender.com/submit_feedback",
+        // "https://radhemelamime.onrender.com/submit_feedback",
+        " https://radhemelamine-backend.onrender.com/submit_feedback",
         payload.toString(),
         {
           headers: {
