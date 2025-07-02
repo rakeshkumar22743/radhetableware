@@ -150,7 +150,7 @@ const CapacityTable = () => {
         className="w-full max-w-7xl bg-white/90 backdrop-blur-lg shadow-2xl rounded-3xl border border-white/30 p-2 sm:p-8 flex flex-col gap-6"
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-8 text-center tracking-tight drop-shadow animate-fade-in">
-          Capacity Data
+          Products Data
         </h2>
         {/* Warning message */}
         {warning && (
