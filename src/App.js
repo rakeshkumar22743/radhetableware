@@ -10,6 +10,7 @@ import CsvDashboard from "./components/CsvDashboard";
 import CsvEditor from "./components/CsvEditor";
 import OrderConfirmation from "./components/OrderConfirmation";
 import AlreadyConfirm from "./components/AlreadyConfirm";
+import CapacityTable from "./components/CapacityTable";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
   {
     path: "/already-confirm",
     element: <AlreadyConfirm />,
+  },
+   {
+    path: "/capacity",
+    element: <CapacityTable />,
   },
 ]);
 
