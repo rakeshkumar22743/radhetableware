@@ -2,99 +2,118 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Select from 'react-select';
 
-const rawData = [
-  {
-    'Product Code': 'BOWL',
-    'Size': '12 INCH',
-    '06-06-2025': 8000, '07-06-2025': 8000, '08-06-2025': 8000, '09-06-2025': 8000, '10-06-2025': 0,
-    '11-06-2025': 8000, '12-06-2025': 8000, '13-06-2025': 7999, '14-06-2025': 8000, '15-06-2025': 8000,
-    '16-06-2025': 8000, '17-06-2025': 0, '18-06-2025': 8000, '19-06-2025': 8000, '20-06-2025': 8000,
-    '21-06-2025': 8000, '22-06-2025': 8000, '23-06-2025': 8000, '24-06-2025': 0, '25-06-2025': 10000,
-    '26-06-2025': 10000, '27-06-2025': 10000, '28-06-2025': 10000, '29-06-2025': 10000, '30-06-2025': 10000,
-    '01-07-2025': 0, '02-07-2025': 10000, '03-07-2025': 10000, '04-07-2025': 10000, '05-07-2025': 10000,
-    '06-07-2025': 10000, '07-07-2025': 10000, '08-07-2025': 0, '09-07-2025': 10000, '10-07-2025': 10000,
-    '11-07-2025': 10000, '12-07-2025': 10000, '13-07-2025': 10000, '14-07-2025': 10000, '15-07-2025': 0
-  },
-  {
-    'Product Code': 'PLATE',
-    'Size': '10 INCH',
-    '06-06-2025': 10, '07-06-2025': 0, '08-06-2025': 15, '09-06-2025': 0, '10-06-2025': 0,
-    '11-06-2025': 0, '12-06-2025': 0, '13-06-2025': 0, '14-06-2025': 0, '15-06-2025': 0,
-    '16-06-2025': 0, '17-06-2025': 0, '18-06-2025': 0, '19-06-2025': 0, '20-06-2025': 0,
-    '21-06-2025': 0, '22-06-2025': 0, '23-06-2025': 0, '24-06-2025': 0, '25-06-2025': 0,
-    '26-06-2025': 0, '27-06-2025': 0, '28-06-2025': 0, '29-06-2025': 0, '30-06-2025': 0,
-    '01-07-2025': 0, '02-07-2025': 0, '03-07-2025': 0, '04-07-2025': 0, '05-07-2025': 0,
-    '06-07-2025': 1000, '07-07-2025': 0, '08-07-2025': 0, '09-07-2025': 0, '10-07-2025': 0,
-    '11-07-2025': 0, '12-07-2025': 0, '13-07-2025': 0, '14-07-2025': 0, '15-07-2025': 0
-  },
-  {
-    'Product Code': 'PLATE',
-    'Size': '12 INCH',
-    '06-06-2025': 0, '07-06-2025': 0, '08-06-2025': 0, '09-06-2025': 0, '10-06-2025': 0,
-    '11-06-2025': 0, '12-06-2025': 0, '13-06-2025': 0, '14-06-2025': 0, '15-06-2025': 0,
-    '16-06-2025': 0, '17-06-2025': 0, '18-06-2025': 0, '19-06-2025': 0, '20-06-2025': 0,
-    '21-06-2025': 0, '22-06-2025': 0, '23-06-2025': 0, '24-06-2025': 50000, '25-06-2025': 50000,
-    '26-06-2025': 50000, '27-06-2025': 50000, '28-06-2025': 49950, '29-06-2025': 47000, '30-06-2025': 0,
-    '01-07-2025': 50000, '02-07-2025': 50000, '03-07-2025': 50000, '04-07-2025': 50000, '05-07-2025': 50000,
-    '06-07-2025': 50000, '07-07-2025': 0, '08-07-2025': 50000, '09-07-2025': 50000, '10-07-2025': 50000,
-    '11-07-2025': 50000, '12-07-2025': 50000, '13-07-2025': 0, '14-07-2025': 0, '15-07-2025': 0
-  }
-];
+const getSizeOptionsForProduct = (product, capacityData) => {
+  if (!capacityData) return [];
+  // Find all unique sizes for this product
+  const sizes = Array.from(
+    new Set(
+      capacityData
+        .filter(row => row['Product Code'] === product && row['Size'])
+        .map(row => row['Size'])
+    )
+  );
+  if (sizes.length === 0) return [];
+  return sizes.map(size => ({ value: size, label: size }));
+};
 
-const allDates = [
-  '06-06-2025', '07-06-2025', '08-06-2025', '09-06-2025', '10-06-2025',
-  '11-06-2025', '12-06-2025', '13-06-2025', '14-06-2025', '15-06-2025',
-  '16-06-2025', '17-06-2025', '18-06-2025', '19-06-2025', '20-06-2025',
-  '21-06-2025', '22-06-2025', '23-06-2025', '24-06-2025', '25-06-2025',
-  '26-06-2025', '27-06-2025', '28-06-2025', '29-06-2025', '30-06-2025',
-  '01-07-2025', '02-07-2025', '03-07-2025', '04-07-2025', '05-07-2025',
-  '06-07-2025', '07-07-2025', '08-07-2025', '09-07-2025', '10-07-2025',
-  '11-07-2025', '12-07-2025', '13-07-2025', '14-07-2025', '15-07-2025'
-];
-
-// Static API-like data (replace rawData usage)
-const staticApiData = [
-  {
-    "Product Code": "BOWL",
-    "06-06-2025": 8000, "07-06-2025": 8000, "08-06-2025": 8000, "09-06-2025": 8000, "10-06-2025": 0, "11-06-2025": 8000, "12-06-2025": 8000, "13-06-2025": 7999, "14-06-2025": 8000, "15-06-2025": 8000, "16-06-2025": 8000, "17-06-2025": 0, "18-06-2025": 8000, "19-06-2025": 8000, "20-06-2025": 8000, "21-06-2025": 8000, "22-06-2025": 8000, "23-06-2025": 8000, "24-06-2025": 0, "25-06-2025": 10000, "26-06-2025": 10000, "27-06-2025": 10000, "28-06-2025": 10000, "29-06-2025": 10000, "30-06-2025": 10000, "01-07-2025": 0, "02-07-2025": 10000, "03-07-2025": 10000, "04-07-2025": 10000, "05-07-2025": 10000, "06-07-2025": 10000, "07-07-2025": 10000, "08-07-2025": 0, "09-07-2025": 10000, "10-07-2025": 10000, "11-07-2025": 10000, "12-07-2025": 10000, "13-07-2025": 10000, "14-07-2025": 10000, "15-07-2025": 0
-  },
-  {
-    "Product Code": "PLATE",
-    "06-06-2025": 8000, "07-06-2025": 8000, "08-06-2025": 8000, "09-06-2025": 8000, "10-06-2025": 0, "11-06-2025": 8000, "12-06-2025": 8000, "13-06-2025": 7999, "14-06-2025": 8000, "15-06-2025": 8000, "16-06-2025": 8000, "17-06-2025": 0, "18-06-2025": 8000, "19-06-2025": 8000, "20-06-2025": 8000, "21-06-2025": 8000, "22-06-2025": 8000, "23-06-2025": 8000, "24-06-2025": 0, "25-06-2025": 10000, "26-06-2025": 10000, "27-06-2025": 10000, "28-06-2025": 10000, "29-06-2025": 10000, "30-06-2025": 10000, "01-07-2025": 0, "02-07-2025": 10000, "03-07-2025": 10000, "04-07-2025": 10000, "05-07-2025": 10000, "06-07-2025": 10000, "07-07-2025": 10000, "08-07-2025": 0, "09-07-2025": 10000, "10-07-2025": 10000, "11-07-2025": 10000, "12-07-2025": 10000, "13-07-2025": 10000, "14-07-2025": 10000, "15-07-2025": 0
-  },
-  {
-    "Product Code": "SPOON",
-    "06-06-2025": 8000, "07-06-2025": 8000, "08-06-2025": 8000, "09-06-2025": 8000, "10-06-2025": 0, "11-06-2025": 8000, "12-06-2025": 8000, "13-06-2025": 7999, "14-06-2025": 8000, "15-06-2025": 8000, "16-06-2025": 8000, "17-06-2025": 0, "18-06-2025": 8000, "19-06-2025": 8000, "20-06-2025": 8000, "21-06-2025": 8000, "22-06-2025": 8000, "23-06-2025": 8000, "24-06-2025": 0, "25-06-2025": 10000, "26-06-2025": 10000, "27-06-2025": 10000, "28-06-2025": 10000, "29-06-2025": 10000, "30-06-2025": 10000, "01-07-2025": 0, "02-07-2025": 10000, "03-07-2025": 10000, "04-07-2025": 10000, "05-07-2025": 10000, "06-07-2025": 10000, "07-07-2025": 10000, "08-07-2025": 0, "09-07-2025": 10000, "10-07-2025": 10000, "11-07-2025": 10000, "12-07-2025": 10000, "13-07-2025": 10000, "14-07-2025": 10000, "15-07-2025": 0
-  }
-];
-
-// Product+Size options from rawData
-const productCodes = ['PLATE', 'BOWL', 'SPOON'];
-const productOptions = productCodes.map(code => ({ value: code, label: code }));
-
-const getSizeOptionsForProduct = (product) => {
-  if (product === 'SPOON') return [];
-  return Array.from(new Set(rawData.filter(row => row['Product Code'] === product).map(row => row['Size'])))
-    .map(size => ({ value: size, label: size }));
+const parseCapacityData = (data, dateKeys) => {
+  // Convert all date values to numbers
+  return data.map(row => {
+    const newRow = { ...row };
+    dateKeys.forEach(date => {
+      if (newRow[date] !== undefined) {
+        newRow[date] = Number(newRow[date]);
+      }
+    });
+    return newRow;
+  });
 };
 
 const CapacityTable = () => {
-  const [selectedProducts, setSelectedProducts] = React.useState([]);
-  const [selectedSizes, setSelectedSizes] = React.useState({});
+  const [capacityData, setCapacityData] = useState(null); // Product+Size
+  const [productCapacityData, setProductCapacityData] = useState(null); // Product only
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState({});
   const [warning, setWarning] = useState("");
+  const [allDates, setAllDates] = useState([]);
+  const [productOptions, setProductOptions] = useState([]);
+
+  // Fetch data from APIs
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+    Promise.all([
+      fetch('https://radhemelamine-backend.onrender.com/api/csv/capacity').then(res => res.json()),
+      fetch('https://radhemelamine-backend.onrender.com/api/csv/product-capacity').then(res => res.json())
+    ])
+      .then(([capRes, prodCapRes]) => {
+        if (!capRes.success || !prodCapRes.success) {
+          throw new Error('API error');
+        }
+        // Extract all unique date keys from both datasets
+        let dateSet = new Set();
+        [...capRes.data, ...prodCapRes.data].forEach(row => {
+          Object.keys(row).forEach(key => {
+            if (key !== 'Product Code' && key !== 'Size') {
+              dateSet.add(key);
+            }
+          });
+        });
+        const datesArr = Array.from(dateSet);
+        // Sort dates (assuming format DD-MM-YYYY)
+        datesArr.sort((a, b) => {
+          const [da, ma, ya] = a.split('-').map(Number);
+          const [db, mb, yb] = b.split('-').map(Number);
+          const d1 = new Date(ya, ma - 1, da);
+          const d2 = new Date(yb, mb - 1, db);
+          return d1 - d2;
+        });
+        setAllDates(datesArr);
+        setCapacityData(parseCapacityData(capRes.data, datesArr));
+        setProductCapacityData(parseCapacityData(prodCapRes.data, datesArr));
+        // Extract all unique Product Codes from both datasets
+        let productSet = new Set();
+        [...capRes.data, ...prodCapRes.data].forEach(row => {
+          if (row['Product Code']) productSet.add(row['Product Code']);
+        });
+        const productArr = Array.from(productSet).map(code => ({ value: code, label: code }));
+        setProductOptions(productArr);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Failed to fetch data. Please try again.');
+        setLoading(false);
+      });
+  }, []);
+
+  // Remove sizes for products that are no longer selected
+  useEffect(() => {
+    setSelectedSizes(prev => {
+      const newSelectedSizes = { ...prev };
+      Object.keys(newSelectedSizes).forEach(product => {
+        if (!selectedProducts.some(p => p.value === product)) {
+          delete newSelectedSizes[product];
+        }
+      });
+      return newSelectedSizes;
+    });
+  }, [selectedProducts]);
 
   // Build selected Product+Size combinations (only for Plate/Bowl)
   const selectedCombinations = [];
-  selectedProducts.forEach(p => {
-    if (p.value === 'SPOON') return;
-    const sizes = selectedSizes[p.value] || [];
-    sizes.forEach(s => {
-      selectedCombinations.push({ product: p.value, size: s.value });
+  if (capacityData) {
+    selectedProducts.forEach(p => {
+      const sizes = selectedSizes[p.value] || [];
+      sizes.forEach(s => {
+        selectedCombinations.push({ product: p.value, size: s.value });
+      });
     });
-  });
+  }
 
   // Calculate total selected combinations (Product+Size + API products)
-  const selectedApiProducts = selectedProducts.filter(p => p.value === 'SPOON' || p.value === 'PLATE' || p.value === 'BOWL');
+  const selectedApiProducts = selectedProducts.filter(p => p.value);
   const totalCombinations = selectedCombinations.length + selectedApiProducts.length;
 
   // Restrict to max 5 combinations (across both API and Product+Size)
@@ -109,9 +128,11 @@ const CapacityTable = () => {
   const canAddMore = totalCombinations < 5;
 
   // Merge: selected Product+Size + always-show API products (for selected products only)
-  const mergedCombinations = [
+  const mergedCombinations = [];
+  if (capacityData && productCapacityData) {
     // Product+Size from selection (Plate/Bowl)
-    ...rawData.filter(row =>
+    mergedCombinations.push(
+      ...capacityData.filter(row =>
       selectedCombinations.some(
         comb => comb.product === row['Product Code'] && comb.size === row['Size']
       )
@@ -119,17 +140,21 @@ const CapacityTable = () => {
       key: row['Product Code'] + '||' + row['Size'],
       label: row['Product Code'] + ' - ' + row['Size'],
       getCapacity: date => row[date] || 0
-    })),
+      }))
+    );
     // Always-show API products for selected products (no size)
-    ...staticApiData.filter(row => selectedProducts.some(p => p.value === row['Product Code'])).map(row => ({
+    mergedCombinations.push(
+      ...productCapacityData.filter(row => selectedProducts.some(p => p.value === row['Product Code'])).map(row => ({
       key: row['Product Code'],
       label: row['Product Code'],
       getCapacity: date => row[date] || 0
     }))
-  ];
+    );
+  }
 
   // For each combination, build a map of date -> running sum capacity
   const adjustedCapacityMap = {};
+  if (mergedCombinations.length > 0) {
   mergedCombinations.forEach(comb => {
     let prev = 0;
     adjustedCapacityMap[comb.key] = {};
@@ -140,6 +165,22 @@ const CapacityTable = () => {
       prev = cap;
     });
   });
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600">
+        <div className="text-2xl text-white font-bold animate-pulse">Loading data...</div>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600">
+        <div className="text-xl text-red-200 font-bold bg-red-700/80 px-6 py-4 rounded-xl shadow-lg">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 flex items-center justify-center p-2 sm:p-4">
@@ -169,7 +210,7 @@ const CapacityTable = () => {
               onChange={opts => {
                 // Prevent adding more than 5 total
                 const newProducts = opts || [];
-                const newApiCount = newProducts.filter(p => p.value === 'SPOON' || p.value === 'PLATE' || p.value === 'BOWL').length;
+                const newApiCount = newProducts.filter(p => p.value).length;
                 if (selectedCombinations.length + newApiCount > 5) {
                   setWarning("Sorry, you can't add more than five combinations.");
                   return;
@@ -223,12 +264,14 @@ const CapacityTable = () => {
             />
           </div>
           <div className="flex flex-wrap gap-6 w-full justify-center mt-2 sm:mt-0">
-            {selectedProducts.filter(p => p.value !== 'SPOON').map(product => (
+            {selectedProducts
+              .filter(product => getSizeOptionsForProduct(product.value, capacityData).length > 0)
+              .map(product => (
               <div key={product.value} className="flex flex-col items-center min-w-[180px]">
                 <label className="font-semibold text-gray-700 mb-2">{product.label} Size</label>
                 <Select
                   isMulti
-                  options={getSizeOptionsForProduct(product.value)}
+                    options={getSizeOptionsForProduct(product.value, capacityData)}
                   value={selectedSizes[product.value] || []}
                   onChange={opts => {
                     // Prevent adding more than 5 total
@@ -296,15 +339,18 @@ const CapacityTable = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6 animate-fade-in">
           {allDates.map(date => {
             // API data (Product Code only)
-            const apiCombos = staticApiData
+            const apiCombos = productCapacityData
+              ? productCapacityData
               .filter(row => selectedProducts.some(p => p.value === row['Product Code']))
               .map(row => ({
                 label: row['Product Code'],
                 capacity: adjustedCapacityMap[row['Product Code']][date]
               }))
-              .sort((a, b) => a.capacity - b.capacity);
+                  .sort((a, b) => a.capacity - b.capacity)
+              : [];
             // Product+Size data (user selection)
-            const comboCombos = rawData
+            const comboCombos = capacityData
+              ? capacityData
               .filter(row =>
                 selectedCombinations.some(
                   comb => comb.product === row['Product Code'] && comb.size === row['Size']
@@ -314,7 +360,8 @@ const CapacityTable = () => {
                 label: row['Product Code'] + ' - ' + row['Size'],
                 capacity: adjustedCapacityMap[row['Product Code'] + '||' + row['Size']][date]
               }))
-              .sort((a, b) => a.capacity - b.capacity);
+                  .sort((a, b) => a.capacity - b.capacity)
+              : [];
             return (
               <motion.div
                 key={date}
@@ -329,7 +376,6 @@ const CapacityTable = () => {
                 </div>
                 {/* API Data Section */}
                 <div className="mb-2">
-                  {/* <div className="text-xs font-bold text-indigo-900 mb-1 uppercase tracking-wider">API Data</div> */}
                   <div className="flex flex-col gap-2">
                     {apiCombos.map(({ label, capacity }) => (
                       <motion.div
@@ -349,7 +395,6 @@ const CapacityTable = () => {
                 <div className="my-2 border-t border-dashed border-[#25252B]" />
                 {/* Product+Size Data Section */}
                 <div>
-                  {/* <div className="text-xs font-bold text-indigo-900 mb-1 uppercase tracking-wider">Product+Size Data</div> */}
                   <div className="flex flex-col gap-2">
                     {comboCombos.map(({ label, capacity }) => (
                       <motion.div

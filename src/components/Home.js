@@ -126,7 +126,7 @@ function Home() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-white">RG Melamine</h1>
             <h2 className="text-3xl md:text-5xl font-semibold mb-8 text-indigo-200">Radhe Tableware</h2>
             <p className="text-xl md:text-2xl mb-12 text-indigo-100">Quality Meets Elegance</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-row flex-wrap gap-4 justify-center">
               <a 
                 href="#products" 
                 className="btn bg-white text-indigo-600 hover:bg-indigo-50 transform hover:scale-105 hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
