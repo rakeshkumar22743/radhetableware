@@ -265,12 +265,39 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-indigo-900 text-white py-12">
+      <footer className="bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white py-8">
         <div className="container">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">Radhe Tableware</h3>
-            <p className="text-indigo-200 mb-6">Quality Meets Elegance</p>
-            <p className="text-indigo-300">&copy; {new Date().getFullYear()} RG Melamine. All rights reserved.</p>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-4">
+              <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
+                Radhe Tableware
+              </h3>
+              <p className="text-indigo-200 text-base font-medium mb-4">Quality Meets Elegance</p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-4 border border-white/20">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <div className="bg-indigo-500 p-1.5 rounded-full">
+                  <FaMapMarkerAlt className="text-white text-lg" />
+                </div>
+                <span className="text-white font-semibold text-base">Our Location</span>
+              </div>
+              <div className="text-center">
+                <p className="text-indigo-100 text-sm leading-relaxed">
+                  AKSHAR INDUSTRIAL PARK, PLOT NO. 81, OPP.ZYDUS CADILA,<br />
+                  VILLAGE VASNA, CHACHARVADI, TALUKA SANAND,<br />
+                  <span className="text-white font-semibold">Ahmedabad, Gujarat, 371652</span>
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <div className="border-t border-white/20 pt-3">
+                <p className="text-indigo-300 text-xs">
+                  &copy; {new Date().getFullYear()} RG Melamine. All rights reserved.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
